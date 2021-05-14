@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: bg3
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password1234
+  redis:
+    image: redis:alpine3.13
+    ports:
+      - 6379:6379

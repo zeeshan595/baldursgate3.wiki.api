@@ -1,0 +1,27 @@
+{
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "editor.tabSize": 2,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "node_modules": true,
+    "package-lock.json": true,
+    "tsconfig.json": false,
+    ".prettierrc": true,
+    "dist": true,
+    "lslib": true
+  },
+  "cSpell.words": [
+    "LSFM",
+    "LSPK",
+    "baldur",
+    "baldur's",
+    "baldursgate",
+    "contentuid",
+    "rinsuki",
+    "uncompress"
+  ]
+}

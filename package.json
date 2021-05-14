@@ -1,0 +1,45 @@
+{
+  "name": "baldursgate3.wiki",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "build": "rm -rf dist && tsc --build tsconfig.prod.json",
+    "build:dev": "rm -rf dist && tsc --watch",
+    "start": "node dist/index.js",
+    "start:dev": "nodemon dist/index.js",
+    "migration:generate": "npm run build && typeorm migration:generate --config dist/helpers/db.config.js --dir src/migrations",
+    "migration:create": "npm run build && typeorm migration:create --config dist/helpers/db.config.js",
+    "migration:run": "npm run build && typeorm migration:run --config dist/helpers/db.config.js",
+    "migration:revert": "npm run build && typeorm migration:revert --config dist/helpers/db.config.js",
+    "tools:extract": "rm -rf dist && tsc --build tsconfig.json && node dist/tools/extract.js"
+  },
+  "devDependencies": {
+    "@rinsuki/lz4-ts": "^1.0.0",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.11",
+    "@types/node": "^15.0.2",
+    "@types/xml2js": "^0.4.8",
+    "nodemon": "^2.0.7",
+    "typescript": "^4.2.4",
+    "xml2js": "^0.4.23"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.24.0",
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "graphql": "^15.5.0",
+    "pg": "^8.6.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1",
+    "typeorm": "^0.2.32"
+  },
+  "keywords": [
+    "baldur",
+    "baldur's",
+    "gate",
+    "3",
+    "three"
+  ],
+  "author": "Zeeshan Abid",
+  "license": "MIT"
+}
