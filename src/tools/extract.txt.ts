@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 export type PlainObject = {
   name: string;
   type: string;
@@ -11,7 +13,7 @@ export type PlainObject = {
 
 export const parseText = (text: string): PlainObject[] => {
   const objArr: PlainObject[] = [];
-  const blobs = text.split('\n\n');
+  const blobs = text.split('\r\n\r\n');
   for (const blob of blobs) {
     let obj: PlainObject = {
       name: null,
@@ -30,6 +32,9 @@ export const parseText = (text: string): PlainObject[] => {
         const splitData = line.split('"');
         const key = splitData[1];
         const value = splitData[3];
+        if (!obj.data) {
+          obj.data = {};
+        }
         obj.data[key] = value;
       } else if (line.startsWith('key')) {
         const splitData = line.split('"');
@@ -40,7 +45,15 @@ export const parseText = (text: string): PlainObject[] => {
         obj.data = value;
       }
     }
-    objArr.push(obj);
+    if (obj && obj.name !== null) {
+      objArr.push(obj);
+    }
   }
   return objArr;
+};
+
+export const uncompressTxt = (inputFile: string, outputFile: string) => {
+  const content = fs.readFileSync(inputFile, { encoding: 'utf8' });
+  const obj = parseText(content);
+  fs.writeFileSync(outputFile, JSON.stringify(obj), { encoding: 'utf8' });
 };
