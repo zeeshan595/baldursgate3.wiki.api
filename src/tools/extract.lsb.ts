@@ -473,19 +473,24 @@ export const getNode = (
   const infoArr = new Uint32Array(buffer.slice(offset, offset + 12));
   offset += 12;
 
+  // get node info
   const nodeNameId = infoArr[0];
   const attributeCount = infoArr[1];
   const childCount = infoArr[2];
   node.name = staticString.strings[nodeNameId];
+
+  // setup attributes
   for (let i = 0; i < attributeCount; i++) {
     const attrib = getAttribute(buffer, staticString, offset);
     node.attributes[attrib.name] = attrib.value;
     offset += attrib.byteLength;
   }
 
+  // setup child nodes
   for (let i = 0; i < childCount; i++) {
     const childNode = getNode(buffer, staticString, offset);
     node.children.push(childNode.node);
+    offset += childNode.bytesLength;
   }
 
   return {
