@@ -37,11 +37,6 @@ const recursiveLsx = async (inPath: string, outPath: string) => {
 };
 
 const main = async () => {
-  uncompressLsb(
-    'assets/pak/Shared/Public/Shared/Localization/ActionResourceDefinitions_Description.lsb',
-    'test.json',
-  );
-  return;
   // extract packages
   const packages = fs.readdirSync('assets/pak');
   for (const pak of packages) {
