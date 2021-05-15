@@ -1,0 +1,1 @@
+[{"name":"SNEAKING","type":"StatusData","using":null,"data":{"StatusType":"SNEAKING","DisplayName":"Status_SNEAKING_SNEAKING_DisplayName","Description":"Status_SNEAKING_SNEAKING_Description","Icon":"Action_Hide","StillAnimationType":"Sneaking","StillAnimationPriority":"Sneaking","Boosts":"Advantage(AttackRoll)","RemoveEvents":"OnAttack","StatusPropertyFlags":"DisableOverhead"}}]
