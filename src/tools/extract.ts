@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import rimraf from 'rimraf';
 import { uncompressPak } from './extract.pak';
 import { uncompressLsb } from './extract.lsb';
 import { uncompressLsx } from './extract.lsx';
@@ -121,5 +122,14 @@ const main = async () => {
     'assets/generated',
     'txt',
   );
+
+  // clean up
+  console.log('cleaning up...');
+  for (const pak of packages) {
+    const extractPath = `assets/pak/${pak.split('.')[0]}`;
+    if (fs.existsSync(extractPath)) {
+      rimraf.sync(extractPath);
+    }
+  }
 };
 main();
