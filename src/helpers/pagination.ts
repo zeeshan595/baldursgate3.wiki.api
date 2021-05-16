@@ -1,5 +1,4 @@
 import { Field, ObjectType } from 'type-graphql';
-import { Repository } from 'typeorm';
 
 @ObjectType()
 export class PaginationMeta {
@@ -37,20 +36,4 @@ export const createPaginationMeta = (
   meta.totalItems = total;
   meta.totalPages = Math.ceil(total / limit);
   return meta;
-};
-
-export const paginate = async <T>(
-  repo: Repository<T>,
-  page: number,
-  limit: number,
-): Promise<Pagination<T>> => {
-  const [result, count] = await repo.findAndCount({
-    skip: (page - 1) * limit,
-    take: limit,
-  });
-  const meta = createPaginationMeta(page, limit, result.length, count);
-  const p = new Pagination<T>();
-  p.meta = meta;
-  p.items = result;
-  return p;
 };
