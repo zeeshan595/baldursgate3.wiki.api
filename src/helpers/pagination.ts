@@ -37,3 +37,21 @@ export const createPaginationMeta = (
   meta.totalPages = Math.ceil(total / limit);
   return meta;
 };
+
+export const paginate = <T>(
+  data: T[],
+  page: number,
+  limit: number,
+): Pagination<T> => {
+  const pageLimit = (page - 1) * limit;
+  const meta = createPaginationMeta(
+    page,
+    limit,
+    Math.min(Math.max(data.length - pageLimit, 0), limit),
+    data.length,
+  );
+  return {
+    items: data.slice(pageLimit, pageLimit + limit),
+    meta,
+  };
+};

@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { paginate, Pagination } from '../helpers/pagination';
 
 type TagJson = {
   name: string;
@@ -61,11 +62,17 @@ export class Tag {
   categories: string[];
 }
 
+@ObjectType()
+export class PaginatedTag extends Pagination<Tag> {
+  @Field(() => [Tag])
+  items: Tag[];
+}
+
 @Resolver()
 export class TagResolver {
   cache: Tag[];
 
-  map(tag: TagJson): Tag {
+  private map(tag: TagJson): Tag {
     return {
       uuid: tag.attributes.UUID.value,
       name: tag.attributes.Name.value,
@@ -74,7 +81,7 @@ export class TagResolver {
       categories: tag.children[0].children.map((c) => c.attributes.Name.value),
     };
   }
-  load(): Tag[] {
+  private load(): Tag[] {
     if (this.cache) {
       return this.cache;
     }
@@ -99,5 +106,13 @@ export class TagResolver {
   @Query(() => Tag)
   tag(@Arg('uuid') uuid: string): Tag {
     return this.load().find((t) => t.uuid === uuid);
+  }
+
+  @Query(() => PaginatedTag)
+  paginatedTags(
+    @Arg('page', { defaultValue: 1 }) page: number,
+    @Arg('limit', { defaultValue: 50 }) limit: number,
+  ): Pagination<Tag> {
+    return paginate(this.load(), page, limit);
   }
 }

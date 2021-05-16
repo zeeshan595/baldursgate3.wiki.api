@@ -1,5 +1,6 @@
 import * as fs from 'fs';
-import { Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { paginate, Pagination } from '../helpers/pagination';
 
 type RaceJsonChild = {
   name: string;
@@ -65,6 +66,12 @@ export class Race {
   subRaces: string[];
 }
 
+@ObjectType()
+export class PaginatedRace extends Pagination<Race> {
+  @Field(() => [Race])
+  items: Race[];
+}
+
 @Resolver()
 export class RaceResolver {
   jsonCache: RaceJson[];
@@ -119,6 +126,7 @@ export class RaceResolver {
       races.push(this.map(race));
     }
 
+    this.jsonCache = [];
     this.cache = races;
     return races;
   }
@@ -126,5 +134,18 @@ export class RaceResolver {
   @Query(() => [Race])
   races(): Race[] {
     return this.load();
+  }
+
+  @Query(() => Race)
+  race(@Arg('uuid') uuid: string): Race {
+    return this.load().find((r) => r.uuid === uuid);
+  }
+
+  @Query(() => PaginatedRace)
+  paginatedSpells(
+    @Arg('page', { defaultValue: 1 }) page: number,
+    @Arg('limit', { defaultValue: 50 }) limit: number,
+  ): Pagination<Race> {
+    return paginate(this.load(), page, limit);
   }
 }

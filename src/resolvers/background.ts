@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { paginate, Pagination } from '../helpers/pagination';
 
 type BackgroundJson = {
   name: string;
@@ -45,6 +46,12 @@ export class Background {
   @Field(() => [String]) tags: string[];
 }
 
+@ObjectType()
+export class PaginatedBackground extends Pagination<Background> {
+  @Field(() => [Background])
+  items: Background[];
+}
+
 @Resolver()
 export class BackgroundResolver {
   cache: Background[];
@@ -80,5 +87,13 @@ export class BackgroundResolver {
   @Query(() => Background)
   background(@Arg('uuid') uuid: string): Background {
     return this.load().find((b) => b.uuid === uuid);
+  }
+
+  @Query(() => PaginatedBackground)
+  paginatedBackgrounds(
+    @Arg('page', { defaultValue: 1 }) page: number,
+    @Arg('limit', { defaultValue: 50 }) limit: number,
+  ): Pagination<Background> {
+    return paginate(this.load(), page, limit);
   }
 }

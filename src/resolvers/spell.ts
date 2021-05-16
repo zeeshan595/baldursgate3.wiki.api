@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { paginate, Pagination } from '../helpers/pagination';
 
 type SpellJsonData = {
   [key: string]: string;
@@ -50,6 +51,12 @@ export class Spell {
   @Field({ nullable: true }) spellJumpType: string;
   @Field({ nullable: true }) spellFail: string;
   @Field({ nullable: true }) extraDescription: string;
+}
+
+@ObjectType()
+export class PaginatedSpell extends Pagination<Spell> {
+  @Field(() => [Spell])
+  items: Spell[];
 }
 
 @Resolver()
@@ -135,5 +142,13 @@ export class SpellResolver {
   @Query(() => [Spell])
   spells(): Spell[] {
     return this.load();
+  }
+
+  @Query(() => PaginatedSpell)
+  paginatedSpells(
+    @Arg('page', { defaultValue: 1 }) page: number,
+    @Arg('limit', { defaultValue: 50 }) limit: number,
+  ): Pagination<Spell> {
+    return paginate(this.load(), page, limit);
   }
 }
