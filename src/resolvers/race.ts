@@ -74,10 +74,10 @@ export class PaginatedRace extends Pagination<Race> {
 
 @Resolver()
 export class RaceResolver {
-  jsonCache: RaceJson[];
-  cache: Race[];
+  private jsonCache: RaceJson[];
+  private cache: Race[];
 
-  map(race: RaceJson): Race {
+  private map(race: RaceJson): Race {
     const eyeColors = race.children.filter((c) => c.name === 'EyeColors');
     const hairColors = race.children.filter((c) => c.name === 'HairColors');
     const makeupColors = race.children.filter((c) => c.name === 'MakeupColors');
@@ -112,7 +112,7 @@ export class RaceResolver {
       subRaces: subRaces.map((e) => e.attributes.UUID.value),
     };
   }
-  load(): Race[] {
+  private load(): Race[] {
     if (this.cache) {
       return this.cache;
     }

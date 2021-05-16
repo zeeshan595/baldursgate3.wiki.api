@@ -61,10 +61,10 @@ export class PaginatedSpell extends Pagination<Spell> {
 
 @Resolver()
 export class SpellResolver {
-  jsonCache: SpellJson[];
-  cache: Spell[];
+  private jsonCache: SpellJson[];
+  private cache: Spell[];
 
-  getBaseSpellData(spell: SpellJson): SpellJsonData {
+  private getBaseSpellData(spell: SpellJson): SpellJsonData {
     let rtn = {};
     if (spell.using) {
       const baseSpell = this.jsonCache.find((s) => s.name === spell.using);
@@ -83,7 +83,7 @@ export class SpellResolver {
     }
     return rtn;
   }
-  map(spell: SpellJson): Spell {
+  private map(spell: SpellJson): Spell {
     const baseSpellData = this.getBaseSpellData(spell);
     const rtn = {
       name: spell.name,
@@ -103,7 +103,7 @@ export class SpellResolver {
 
     return rtn as Spell;
   }
-  load(): Spell[] {
+  private load(): Spell[] {
     if (this.cache) {
       return this.cache;
     }

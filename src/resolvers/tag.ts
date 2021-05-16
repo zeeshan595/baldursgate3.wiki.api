@@ -70,7 +70,7 @@ export class PaginatedTag extends Pagination<Tag> {
 
 @Resolver()
 export class TagResolver {
-  cache: Tag[];
+  private cache: Tag[];
 
   private map(tag: TagJson): Tag {
     return {

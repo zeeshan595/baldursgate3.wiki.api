@@ -54,9 +54,9 @@ export class PaginatedBackground extends Pagination<Background> {
 
 @Resolver()
 export class BackgroundResolver {
-  cache: Background[];
+  private cache: Background[];
 
-  map(background: BackgroundJson): Background {
+  private map(background: BackgroundJson): Background {
     return {
       uuid: background.attributes.UUID.value,
       description: background.attributes.Description.value,
@@ -65,7 +65,7 @@ export class BackgroundResolver {
       tags: background.children.map((t) => t.attributes.Object.value),
     };
   }
-  load(): Background[] {
+  private load(): Background[] {
     if (this.cache) {
       return this.cache;
     }
