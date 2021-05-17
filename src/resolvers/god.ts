@@ -34,7 +34,7 @@ export class God {
 }
 
 @ObjectType()
-export class PaginatedGods extends Pagination<God> {
+export class PaginatedGod extends Pagination<God> {
   @Field(() => [God]) items: God[];
 }
 
@@ -73,7 +73,7 @@ export class GodResolver {
     return this.load().find(g => g.uuid === uuid);
   }
 
-  @Query(() => PaginatedGods)
+  @Query(() => PaginatedGod)
   paginatedGod(
     @Arg('page') page: number,
     @Arg('limit') limit: number,
