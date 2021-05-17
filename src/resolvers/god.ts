@@ -1,5 +1,6 @@
 import * as fs from 'fs';
-import { Field, ObjectType, Resolver } from 'type-graphql';
+import { Arg, Field, ObjectType, Query, Resolver } from 'type-graphql';
+import { paginate, Pagination } from '../helpers/pagination';
 
 type GodJson = {
   name: string;
@@ -32,6 +33,11 @@ export class God {
   @Field(() => [String]) tags: string[];
 }
 
+@ObjectType()
+export class PaginatedGods extends Pagination<God> {
+  @Field(() => [God]) items: God[];
+}
+
 @Resolver()
 export class GodResolver {
   private cache: God[];
@@ -55,5 +61,23 @@ export class GodResolver {
     );
     this.cache = data.children.map((c) => this.map(c));
     return this.cache;
+  }
+
+  @Query(() => [God])
+  gods() {
+    return this.load();
+  }
+
+  @Query()
+  god(@Arg('uuid') uuid: string): God {
+    return this.load().find(g => g.uuid === uuid);
+  }
+
+  @Query(() => PaginatedGods)
+  paginatedGod(
+    @Arg('page') page: number,
+    @Arg('limit') limit: number,
+  ): Pagination<God> {
+    return paginate(this.load(), page, limit);
   }
 }
