@@ -19,6 +19,16 @@ type FeatJsonContainer = {
   children: FeatJson[];
 };
 
+type FeatDescriptionJson = {
+  children: {
+    attributes: {
+      FeatId: { value: string };
+      Description: { value: string };
+      DisplayName: { value: string };
+    };
+  }[];
+};
+
 @ObjectType()
 export class Feat {
   @Field() uuid: string;
@@ -28,6 +38,9 @@ export class Feat {
   @Field(() => [String]) passivesAdded: string[];
   @Field(() => [String]) passivesRemoved: string[];
   @Field(() => [String]) requirements: string[];
+
+  @Field({ nullable: true }) displayName?: string;
+  @Field({ nullable: true }) description?: string;
 }
 
 @ObjectType()
@@ -59,6 +72,22 @@ export class FeatResolver {
       fs.readFileSync('assets/feats/Feats.json', { encoding: 'utf8' }),
     );
     this.cache = data.children.map((c) => this.map(c));
+    const descriptionData: FeatDescriptionJson = JSON.parse(
+      fs.readFileSync('assets/feats/FeatDescriptions.json', {
+        encoding: 'utf8',
+      }),
+    );
+    for (let i = 0; i < this.cache.length; i++) {
+      const feat = this.cache[i];
+      const featDescription = descriptionData.children.find(
+        (f) => f.attributes.FeatId.value === feat.uuid,
+      );
+      if (!featDescription) {
+        continue;
+      }
+      this.cache[i].displayName = featDescription.attributes.DisplayName.value;
+      this.cache[i].description = featDescription.attributes.Description.value;
+    }
     return this.cache;
   }
 
