@@ -13,6 +13,7 @@ import { PassiveResolver } from './passive';
 import { SkillResolver } from './skill';
 import { ArmorResolver } from './armor';
 import { CharacterResolver } from './character';
+import { LocalizationResolver } from './localization';
 
 export const resolvers: NonEmptyArray<Function> | NonEmptyArray<string> = [
   SpellResolver,
@@ -28,5 +29,6 @@ export const resolvers: NonEmptyArray<Function> | NonEmptyArray<string> = [
   PassiveResolver,
   SkillResolver,
   ArmorResolver,
-  CharacterResolver
+  CharacterResolver,
+  LocalizationResolver,
 ];
