@@ -35,24 +35,24 @@ type PassiveListJsonContainer = {
 @ObjectType()
 export class Passive {
   @Field() name: string;
-  @Field() icon: string;
-  @Field() boosts: string;
-  @Field() conditions: string;
-  @Field() properties: string;
-  @Field() description: string;
-  @Field() displayName: string;
-  @Field() statsFunctors: string;
-  @Field() extraDescription: string;
-  @Field() toggleOnFunctors: string;
-  @Field() descriptionParams: string;
-  @Field() toggleOffFunctors: string;
-  @Field() statsFunctorContext: string;
+  @Field({ nullable: true }) icon: string;
+  @Field({ nullable: true }) boosts: string;
+  @Field({ nullable: true }) conditions: string;
+  @Field({ nullable: true }) properties: string;
+  @Field({ nullable: true }) description: string;
+  @Field({ nullable: true }) displayName: string;
+  @Field({ nullable: true }) statsFunctors: string;
+  @Field({ nullable: true }) extraDescription: string;
+  @Field({ nullable: true }) toggleOnFunctors: string;
+  @Field({ nullable: true }) descriptionParams: string;
+  @Field({ nullable: true }) toggleOffFunctors: string;
+  @Field({ nullable: true }) statsFunctorContext: string;
 }
 
 @ObjectType()
 export class PassiveList {
   @Field() uuid: string;
-  @Field() passives: string[];
+  @Field(() => [String]) passives: string[];
 }
 
 @Resolver()
@@ -63,18 +63,18 @@ export class PassiveResolver {
   private map(passive: PassiveJson): Passive {
     return {
       name: passive.name,
-      icon: passive.data.Icon,
-      boosts: passive.data.Boosts,
-      conditions: passive.data.Conditions,
-      properties: passive.data.Properties,
-      description: passive.data.Description,
-      displayName: passive.data.DisplayName,
-      statsFunctors: passive.data.StatsFunctors,
-      extraDescription: passive.data.ExtraDescription,
-      toggleOnFunctors: passive.data.ToggleOnFunctors,
-      descriptionParams: passive.data.DescriptionParams,
-      toggleOffFunctors: passive.data.ToggleOffFunctors,
-      statsFunctorContext: passive.data.StatsFunctorsContentext,
+      icon: passive.data?.Icon,
+      boosts: passive.data?.Boosts,
+      conditions: passive.data?.Conditions,
+      properties: passive.data?.Properties,
+      description: passive.data?.Description,
+      displayName: passive.data?.DisplayName,
+      statsFunctors: passive.data?.StatsFunctors,
+      extraDescription: passive.data?.ExtraDescription,
+      toggleOnFunctors: passive.data?.ToggleOnFunctors,
+      descriptionParams: passive.data?.DescriptionParams,
+      toggleOffFunctors: passive.data?.ToggleOffFunctors,
+      statsFunctorContext: passive.data?.StatsFunctorsContentext,
     };
   }
   private load(): Passive[] {

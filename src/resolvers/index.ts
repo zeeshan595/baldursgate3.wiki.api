@@ -10,6 +10,7 @@ import { GodResolver } from './god';
 import { ResourceResolver } from './resource';
 import { AbilityResolver } from './ability';
 import { PassiveResolver } from './passive';
+import { SkillResolver } from './skill';
 
 export const resolvers: NonEmptyArray<Function> | NonEmptyArray<string> = [
   SpellResolver,
@@ -23,4 +24,5 @@ export const resolvers: NonEmptyArray<Function> | NonEmptyArray<string> = [
   ResourceResolver,
   AbilityResolver,
   PassiveResolver,
+  SkillResolver,
 ];

@@ -82,7 +82,7 @@ export class ResourceResolver {
     return this.load();
   }
 
-  @Query()
+  @Query(() => Resource)
   resource(@Arg('uuid') uuid: string) {
     return this.load().find((r) => r.uuid === uuid);
   }
