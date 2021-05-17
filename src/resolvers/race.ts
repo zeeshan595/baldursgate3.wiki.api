@@ -142,7 +142,7 @@ export class RaceResolver {
   }
 
   @Query(() => PaginatedRace)
-  paginatedSpells(
+  paginatedRaces(
     @Arg('page', { defaultValue: 1 }) page: number,
     @Arg('limit', { defaultValue: 50 }) limit: number,
   ): Pagination<Race> {
