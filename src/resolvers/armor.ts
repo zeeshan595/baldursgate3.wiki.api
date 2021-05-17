@@ -60,14 +60,40 @@ export class PaginatedArmor extends Pagination<Armor> {
 
 @Resolver()
 export class ArmorResolver {
+  private cacheJson: ArmorJson[];
   private cache: Armor[];
 
+  private getBaseArmorData(armor: ArmorJson): ArmorJson {
+    const baseArmor = this.cacheJson.find((a) => a.name === armor.using);
+    let data = armor.data;
+    if (baseArmor) {
+      if (baseArmor.using) {
+        const parent = this.getBaseArmorData(baseArmor);
+        data = {
+          ...parent.data,
+          ...baseArmor.data,
+          ...data,
+        };
+      } else {
+        data = {
+          ...baseArmor.data,
+          ...data,
+        };
+      }
+    }
+
+    return {
+      ...armor,
+      data,
+    };
+  }
   private map(armor: ArmorJson): Armor {
     if (!armor.data) {
       return {
         name: armor.name,
       };
     }
+    armor = this.getBaseArmorData(armor);
     return {
       name: armor.name,
       slot: armor.data?.Slot,
@@ -117,7 +143,9 @@ export class ArmorResolver {
     const data: ArmorJson[] = JSON.parse(
       fs.readFileSync('assets/generated/Armor.json', { encoding: 'utf8' }),
     );
+    this.cacheJson = data;
     this.cache = data.map((a) => this.map(a));
+    this.cacheJson = [];
     return this.cache;
   }
 
