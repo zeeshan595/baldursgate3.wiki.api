@@ -60,7 +60,7 @@ export class AbilityResolver {
     return this.load();
   }
 
-  @Query()
+  @Query(() => AbilityList)
   abilityList(@Arg('uuid') uuid: string): AbilityList {
     return this.load().find((a) => a.uuid === uuid);
   }

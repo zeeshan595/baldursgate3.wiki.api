@@ -13,6 +13,17 @@ type SpellJson = {
   data: SpellJsonData;
 };
 
+type SpellListJson = {
+  attributes: {
+    UUID: { value: string };
+    Spells: { value: string };
+  };
+};
+
+type SpellListJsonContainer = {
+  children: SpellListJson[];
+};
+
 @ObjectType()
 export class Spell {
   @Field({ nullable: true }) name: string;
@@ -54,6 +65,12 @@ export class Spell {
 }
 
 @ObjectType()
+export class SpellList {
+  @Field() uuid: string;
+  @Field(() => [String]) spells: string[];
+}
+
+@ObjectType()
 export class PaginatedSpell extends Pagination<Spell> {
   @Field(() => [Spell])
   items: Spell[];
@@ -63,6 +80,7 @@ export class PaginatedSpell extends Pagination<Spell> {
 export class SpellResolver {
   private jsonCache: SpellJson[];
   private cache: Spell[];
+  private cacheList: SpellList[];
 
   private getBaseSpellData(spell: SpellJson): SpellJsonData {
     let rtn = {};
@@ -127,6 +145,34 @@ export class SpellResolver {
     this.cache = spells;
     this.jsonCache = [];
     return spells;
+  }
+  private mapList(spellList: SpellListJson): SpellList {
+    return {
+      uuid: spellList.attributes.UUID.value,
+      spells: spellList.attributes.Spells.value.split(';').map((s) => s.trim()),
+    };
+  }
+  private loadList(): SpellList[] {
+    if (this.cacheList) {
+      return this.cacheList;
+    }
+    const data: SpellListJsonContainer = JSON.parse(
+      fs.readFileSync('assets/lists/SpellList.json', {
+        encoding: 'utf8',
+      }),
+    );
+    this.cacheList = data.children.map((c) => this.mapList(c));
+    return this.cacheList;
+  }
+
+  @Query(() => [SpellList])
+  spellLists(): SpellList[] {
+    return this.loadList();
+  }
+
+  @Query(() => [Spell])
+  spellLsit(@Arg('uuid') uuid: string): SpellList {
+    return this.loadList().find((s) => s.uuid === uuid);
   }
 
   @Query(() => Spell)
