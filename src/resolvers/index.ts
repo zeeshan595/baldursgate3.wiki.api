@@ -7,6 +7,7 @@ import { ClassResolver } from './class';
 import { WeaponResolver } from './weapon';
 import { FeatResolver } from './feat';
 import { GodResolver } from './god';
+import { ResourceResolver } from './resource';
 
 export const resolvers: NonEmptyArray<Function> | NonEmptyArray<string> = [
   SpellResolver,
@@ -17,4 +18,5 @@ export const resolvers: NonEmptyArray<Function> | NonEmptyArray<string> = [
   WeaponResolver,
   FeatResolver,
   GodResolver,
+  ResourceResolver
 ];
